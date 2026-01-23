@@ -1,8 +1,10 @@
 import { Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
+import type { Page } from '../App';
+
 
 interface HomeProps {
-  onNavigate: (page: string) => void;
+  onNavigate: (page: Page) => void;
 }
 
 export function Home({ onNavigate }: HomeProps) {

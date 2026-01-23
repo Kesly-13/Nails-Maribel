@@ -8,9 +8,11 @@ import { Notifications } from './components/Notifications';
 import { Login } from './components/Login';
 import { Dashboard } from './components/Dashboard';
 import { ClientPortal } from './components/ClientPortal';
-import { Toaster, toast } from 'sonner@2.0.3';
+import { Toaster, toast } from "sonner";
+import type { Page } from '../App';
 
-type Page = 'home' | 'about' | 'services' | 'book' | 'notifications' | 'login' | 'dashboard' | 'client-portal';
+
+export type Page = 'home' | 'about' | 'services' | 'book' | 'notifications' | 'login' | 'dashboard' | 'client-portal';
 
 interface Appointment {
   id: string;
@@ -79,7 +81,7 @@ export default function App() {
     const sampleAppointments: Appointment[] = [
       {
         id: '1',
-        name: 'Laura Martínez',
+        name: 'Laura Martinez',
         phone: '+57 300 123 4567',
         email: 'laura@email.com',
         date: '2026-01-25',
@@ -90,7 +92,7 @@ export default function App() {
       },
       {
         id: '2',
-        name: 'Carolina Gómez',
+        name: 'Carolina Gomez',
         phone: '+57 310 987 6543',
         email: 'carolina@email.com',
         date: '2026-01-26',
@@ -101,7 +103,7 @@ export default function App() {
       },
       {
         id: '3',
-        name: 'María Rodríguez',
+        name: 'Maria Rodriguez',
         phone: '+57 315 555 1234',
         email: 'maria@email.com',
         date: '2026-01-27',
@@ -112,7 +114,7 @@ export default function App() {
       },
       {
         id: '4',
-        name: 'Andrea López',
+        name: 'Andrea Lopez',
         phone: '+57 320 444 5678',
         email: 'andrea@email.com',
         date: '2026-01-28',
@@ -124,7 +126,7 @@ export default function App() {
       },
       {
         id: '5',
-        name: 'Sofía Vargas',
+        name: 'Sofia Vargas',
         phone: '+57 318 333 9999',
         email: 'sofia@email.com',
         date: '2026-01-25',
@@ -269,73 +271,75 @@ export default function App() {
   };
 
   const handleRejectAppointment = (id: string, reason?: string) => {
-    setAppointments(prev =>
-      prev.map(apt =>
-        apt.id === id 
-          ? { ...apt, status: 'rejected' as const, rejectionReason: reason } 
-          : apt
-      )
-    );
+  setAppointments(prev =>
+    prev.map(apt =>
+      apt.id === id
+        ? { ...apt, status: 'rejected', rejectionReason: reason }
+        : apt
+    )
+  );
 
-    const appointment = appointments.find(apt => apt.id === id);
-    if (appointment) {
-      const notification: Notification = {
-        id: Date.now().toString(),
-        type: 'rejected',
-        title: 'Cita No Disponible',
-        message: 'Lamentamos informarte que no podemos confirmar tu cita en este horario.',
-        date: new Date().toLocaleString('es-CO', { 
-          day: '2-digit', 
-          month: 'short', 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        }),
-        appointmentDetails: {
-          service: appointment.service,
-          date: appointment.date,
-          time: appointment.time
-        },
-        rejectionReason: reason
-      };
-      
-      setNotifications(prev => [notification, ...prev]);
-      toast.error(`Cita de ${appointment.name} rechazada`);
+  const appointment = appointments.find(apt => apt.id === id);
+  if (!appointment) return;
+
+  const notification: Notification = {
+    id: Date.now().toString(),
+    type: 'rejected',
+    title: 'Cita No Disponible',
+    message: 'Lamentamos informarte que no podemos confirmar tu cita en este horario.',
+    date: new Date().toLocaleString('es-CO', {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
+    }),
+    appointmentDetails: {
+      service: appointment.service,
+      date: appointment.date,
+      time: appointment.time
+    },
+    rejectionReason: reason
+  };
+
+  setNotifications(prev => [notification, ...prev]);
+  toast.error(`Cita de ${appointment.name} rechazada`);
+};
+
+
+ const handleCancelAppointment = (id: string, reason: string) => {
+  setAppointments(prev =>
+    prev.map(apt =>
+      apt.id === id
+        ? { ...apt, status: 'cancelled', cancellationReason: reason }
+        : apt
+    )
+  );
+
+  const appointment = appointments.find(apt => apt.id === id);
+  if (!appointment) return;
+
+  const notification: Notification = {
+    id: Date.now().toString(),
+    type: 'cancelled',
+    title: 'Cita Cancelada',
+    message: 'Has cancelado tu cita exitosamente.',
+    date: new Date().toLocaleString('es-CO', {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
+    }),
+    appointmentDetails: {
+      service: appointment.service,
+      date: appointment.date,
+      time: appointment.time
     }
   };
 
-  const handleCancelAppointment = (id: string, reason: string) => {
-    setAppointments(prev =>
-      prev.map(apt =>
-        apt.id === id 
-          ? { ...apt, status: 'cancelled' as const, cancellationReason: reason } 
-          : apt
-      )
-    );
+  setNotifications(prev => [notification, ...prev]);
+  toast.success('Cita cancelada');
+};
 
-    const appointment = appointments.find(apt => apt.id === id);
-    if (appointment) {
-      const notification: Notification = {
-        id: Date.now().toString(),
-        type: 'cancelled',
-        title: 'Cita Cancelada',
-        message: 'Has cancelado tu cita exitosamente.',
-        date: new Date().toLocaleString('es-CO', { 
-          day: '2-digit', 
-          month: 'short', 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        }),
-        appointmentDetails: {
-          service: appointment.service,
-          date: appointment.date,
-          time: appointment.time
-        }
-      };
-      
-      setNotifications(prev => [notification, ...prev]);
-      toast.success('Cita cancelada');
-    }
-  };
 
   const handleUpdateServicePrice = (serviceId: string, newPrice: string) => {
     setServices(prev =>
@@ -370,7 +374,7 @@ export default function App() {
     });
   };
 
-  const unreadNotifications = notifications.length;
+  const unreadNotifications = Notifications.length;
 
   // Get booked slots from appointments
   const bookedSlots = appointments
