@@ -276,6 +276,8 @@ app.delete('/blocked-dates/:date', async (req, res) => {
 
 
 /* ===== SERVIDOR ===== */
-app.listen(3001, () => {
-  console.log('Backend corriendo en http://localhost:3001');
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+  console.log(`Backend corriendo en puerto ${PORT}`);
 });
