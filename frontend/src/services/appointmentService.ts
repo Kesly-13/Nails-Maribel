@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3001';
+const API_URL = 'https://nails-maribel-backend.onrender.com';
 
 export async function getAppointments() {
   const response = await fetch(`${API_URL}/appointments`);
@@ -33,7 +33,7 @@ export const updateAppointmentStatus = async (
   reason?: string
 ) => {
   const response = await fetch(
-    `http://localhost:3001/appointments/${id}`,  // id ya es string
+    `http://nails-maribel-backend.onrender.com/appointments/${id}`,  // id ya es string
     {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
