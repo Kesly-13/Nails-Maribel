@@ -33,7 +33,7 @@ export const updateAppointmentStatus = async (
   reason?: string
 ) => {
   const response = await fetch(
-    `http://nails-maribel-backend.onrender.com/appointments/${id}`,  // id ya es string
+    `https://nails-maribel-backend.onrender.com/appointments/${id}`,  // id ya es string
     {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
