@@ -59,13 +59,21 @@ export function Dashboard({
     return { daysInMonth, startingDayOfWeek };
   };
 
-  const getAppointmentsForDate = (day: number) => {
-    const year = selectedMonth.getFullYear();
-    const month = selectedMonth.getMonth();
-    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    
-    return appointments.filter(apt => apt.date === dateStr);
-  };
+const getAppointmentsForDate = (day: number) => {
+  const year = selectedMonth.getFullYear();
+  const month = selectedMonth.getMonth();
+
+  const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+  return appointments.filter(apt => {
+    const formattedDate = new Date(apt.date)
+      .toISOString()
+      .split('T')[0];
+
+    return formattedDate === dateStr;
+  });
+};
+
 
   const isDateBlocked = (day: number) => {
     const year = selectedMonth.getFullYear();
@@ -364,7 +372,9 @@ export function Dashboard({
                     <div className="space-y-1 mb-3 text-sm text-gray-600">
                       <div className="flex items-center gap-2">
                         <CalendarIcon className="w-4 h-4" />
-                        <span>{appointment.date}</span>
+                      <span>
+                          {new Date(appointment.date).toLocaleDateString("es-CO")}
+                      </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4" />
