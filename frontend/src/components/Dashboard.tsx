@@ -74,6 +74,18 @@ const getAppointmentsForDate = (day: number) => {
   });
 };
 
+const formatearHora = (hora24: string) => {
+  if (!hora24) return '';
+
+  const [h, m] = hora24.split(':');
+  let hora = parseInt(h);
+
+  const ampm = hora >= 12 ? 'PM' : 'AM';
+  hora = hora % 12 || 12;
+
+  return `${hora}:${m} ${ampm}`;
+};
+
 
   const isDateBlocked = (day: number) => {
     const year = selectedMonth.getFullYear();
@@ -298,7 +310,8 @@ const getAppointmentsForDate = (day: number) => {
                       >
                         <div className="flex items-start justify-between mb-1">
                           <span className="font-medium text-gray-900">{apt.client_name}</span>
-                          <span className="text-xs text-gray-600">{apt.time}</span>
+                          <span className="text-xs text-gray-600">
+                          {formatearHora(apt.time)} </span>
                         </div>
                         <p className="text-xs text-gray-600">{apt.service}</p>
                         <div className="flex items-center gap-2 mt-1">
@@ -378,7 +391,7 @@ const getAppointmentsForDate = (day: number) => {
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        <span>{appointment.time}</span>
+                      <span>{formatearHora(appointment.time)}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4" />
