@@ -91,6 +91,8 @@ const appointment = {
   service: displayServices.find(s => s.id === selectedService)?.name || '',
   date: selectedDate,
   time: convertTo24Hour(selectedTime),
+  phone: formData.phone,      
+  email: formData.email,  
   status: 'pending',
 };
 

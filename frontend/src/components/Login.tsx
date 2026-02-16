@@ -206,7 +206,6 @@ if (result.success) {
               <p className="text-xs text-gray-500">Email: admin@nailsmaribel.com</p>
               <p className="text-xs text-gray-500">Contraseña: admin123</p>
               <p className="text-xs text-red-500">Este email y contraseña son de prueba</p>
-              <p className="text-xs text-red-500">NO SERAN FIJOS!!</p> 
               <p className="text-xs text-green-800">Login linea:206 para cambios</p>
             </div>
           )}
